@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>হাবিব সেফ ওয়েব গার্ড বিডি</title>
+    <style>
+        :root {
+            --primary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            color: #34d399;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        p.sub {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #475569;
+            background-color: #0f172a;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        input[type="text"]:focus {
+            border-color: #34d399;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #059669;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            display: none;
+        }
+        .safe { background-color: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; }
+        .danger { background-color: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>হাবিব সেফ ওয়েব গার্ড বিডি</h1>
+        <p class="sub">ফিশিং, স্ক্যাম এবং বেটিং অ্যাপের ভুয়া লিংক যাচাই করুন</p>
+        
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="এখানে ওয়েবসাইটের লিংক দিন (לדוגמה: example.com)">
+            <button onclick="checkURL()">যাচাই করুন</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function checkURL() {
+            const url = document.getElementById('urlInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if(!url) {
+                alert('দয়া করে একটি লিংক দিন!');
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            
+            // Basic simulation logic for scam/betting keywords
+            const scamKeywords = ['bet', 'baji', 'win', '1xbet', 'jili', 'free', 'bonus', 'login-secure'];
+            let isScam = scamKeywords.some(keyword => url.toLowerCase().includes(keyword));
+
+            if(isScam) {
+                resultDiv.className = 'danger';
+                resultDiv.innerHTML = '<strong>সতর্কতা!</strong> এই লিংকে ফিশিং বা জুয়া/স্ক্যামের ঝুঁকি রয়েছে। এটি নিরাপদ নয়!';
+            } else {
+                resultDiv.className = 'safe';
+                resultDiv.innerHTML = '<strong>নিরাপদ মনে হচ্ছে!</strong> এই লিংকটিতে তাৎক্ষণিক কোনো ক্ষতিকর উপাদান পাওয়া যায়নি। তবে সাবধানে ব্রাউজ করুন।';
+            }
+        }
+    </script>
+</body>
+</html>
