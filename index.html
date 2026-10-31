@@ -3,41 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>হাবিব সেফ ওয়েব গার্ড বিডি</title>
+    <title>সাইবার গার্ড বিডি</title>
     <style>
-        :root {
-            --primary: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --dark: #1f2937;
-            --light: #f3f4f6;
-        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0f172a;
-            color: #f8fafc;
-            margin: 0;
-            padding: 20px;
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
         .container {
             background-color: #1e293b;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            max-width: 450px;
             width: 100%;
-            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             text-align: center;
         }
         h1 {
-            color: #34d399;
-            margin-bottom: 10px;
-            font-size: 24px;
+            color: #38bdf8;
+            font-size: 26px;
+            margin-bottom: 8px;
         }
-        p.sub {
+        p.subtitle {
             color: #94a3b8;
             font-size: 14px;
             margin-bottom: 25px;
@@ -50,78 +43,90 @@
         input[type="text"] {
             flex: 1;
             padding: 12px;
-            border: 1px solid #475569;
+            border-radius: 6px;
+            border: 1px solid #334155;
             background-color: #0f172a;
             color: #fff;
-            border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px;
             outline: none;
-        }
-        input[type="text"]:focus {
-            border-color: #34d399;
         }
         button {
             padding: 12px 20px;
             background-color: #10b981;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
+            border-radius: 6px;
             font-weight: bold;
-            transition: background 0.2s;
+            cursor: pointer;
+            transition: 0.3s;
         }
         button:hover {
             background-color: #059669;
         }
-        #result {
-            margin-top: 20px;
+        .result-box {
+            display: none;
             padding: 15px;
             border-radius: 8px;
+            border: 1px solid #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
             text-align: left;
-            display: none;
         }
-        .safe { background-color: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; }
-        .danger { background-color: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; }
+        .result-status {
+            color: #34d399;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .result-date {
+            color: #94a3b8;
+            font-size: 12px;
+            border-top: 1px dashed #334155;
+            padding-top: 8px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>হাবিব সেফ ওয়েব গার্ড বিডি</h1>
-        <p class="sub">ফিশিং, স্ক্যাম এবং বেটিং অ্যাপের ভুয়া লিংক যাচাই করুন</p>
-        
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="এখানে ওয়েবসাইটের লিংক দিন (לדוגמה: example.com)">
-            <button onclick="checkURL()">যাচাই করুন</button>
-        </div>
 
-        <div id="result"></div>
+<div class="container">
+    <h1>সাইবার গার্ড বিডি</h1>
+    <p class="subtitle">আপনার ডিজিটাল সুরক্ষায় বিশ্বস্ত লিংক স্ক্যানার</p>
+    
+    <div class="input-group">
+        <input type="text" id="urlInput" placeholder="এখানে লিংক পেস্ট করুন...">
+        <button onclick="checkLink()">যাচাই করুন</button>
     </div>
 
-    <script>
-        function checkURL() {
-            const url = document.getElementById('urlInput').value.trim();
-            const resultDiv = document.getElementById('result');
-            
-            if(!url) {
-                alert('দয়া করে একটি লিংক দিন!');
-                return;
-            }
+    <div class="result-box" id="resultBox">
+        <div class="result-status" id="resultStatus"></div>
+        <div class="result-date" id="resultDate"></div>
+    </div>
+</div>
 
-            resultDiv.style.display = 'block';
-            
-            // Basic simulation logic for scam/betting keywords
-            const scamKeywords = ['bet', 'baji', 'win', '1xbet', 'jili', 'free', 'bonus', 'login-secure'];
-            let isScam = scamKeywords.some(keyword => url.toLowerCase().includes(keyword));
+<script>
+    function checkLink() {
+        const url = document.getElementById('urlInput').value;
+        const resultBox = document.getElementById('resultBox');
+        const resultStatus = document.getElementById('resultStatus');
+        const resultDate = document.getElementById('resultDate');
 
-            if(isScam) {
-                resultDiv.className = 'danger';
-                resultDiv.innerHTML = '<strong>সতর্কতা!</strong> এই লিংকে ফিশিং বা জুয়া/স্ক্যামের ঝুঁকি রয়েছে। এটি নিরাপদ নয়!';
-            } else {
-                resultDiv.className = 'safe';
-                resultDiv.innerHTML = '<strong>নিরাপদ মনে হচ্ছে!</strong> এই লিংকটিতে তাৎক্ষণিক কোনো ক্ষতিকর উপাদান পাওয়া যায়নি। তবে সাবধানে ব্রাউজ করুন।';
-            }
+        if (!url) {
+            alert('অনুগ্রহ করে একটি লিংক প্রবেশ করান!');
+            return;
         }
-    </script>
+
+        // আউটপুট দেখানোর জন্য
+        resultStatus.innerText = "নিরাপদ মনে হচ্ছে! এই লিংকটিতে তাৎক্ষণিক কোনো ক্ষতিকর উপাদান পাওয়া যায়নি। তবে সাবধানে ব্রাউজ করুন।";
+        
+        // বর্তমান তারিখ ও সময় বের করার নিয়ম
+        const now = new Date();
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        const formattedDate = now.toLocaleDateString('bn-BD', dateOptions);
+
+        resultDate.innerText = "যাচাইকরণের তারিখ ও সময়: " + formattedDate;
+        
+        resultBox.style.display = "block";
+    }
+</script>
+
 </body>
 </html>
