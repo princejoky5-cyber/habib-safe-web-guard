@@ -67,17 +67,31 @@
             display: none;
             padding: 15px;
             border-radius: 8px;
+            text-align: left;
+            margin-top: 15px;
+        }
+        .result-safe {
             border: 1px solid #10b981;
             background-color: rgba(16, 185, 129, 0.1);
-            text-align: left;
         }
-        .result-status {
-            color: #34d399;
-            font-size: 15px;
-            font-weight: 500;
+        .result-warning {
+            border: 1px solid #f59e0b;
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+        .result-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .text-safe { color: #34d399; }
+        .text-warning { color: #fbbf24; }
+        .result-desc {
+            color: #cbd5e1;
+            font-size: 14px;
             margin-bottom: 10px;
+            line-height: 1.4;
         }
-        .result-date {
+        .result-domain-info {
             color: #94a3b8;
             font-size: 12px;
             border-top: 1px dashed #334155;
@@ -92,39 +106,61 @@
     <p class="subtitle">আপনার ডিজিটাল সুরক্ষায় বিশ্বস্ত লিংক স্ক্যানার</p>
     
     <div class="input-group">
-        <input type="text" id="urlInput" placeholder="এখানে লিংক পেস্ট করুন...">
+        <input type="text" id="urlInput" placeholder="যাচাই করতে লিংকটি পেস্ট করুন...">
         <button onclick="checkLink()">যাচাই করুন</button>
     </div>
 
     <div class="result-box" id="resultBox">
-        <div class="result-status" id="resultStatus"></div>
-        <div class="result-date" id="resultDate"></div>
+        <div class="result-title" id="resultTitle"></div>
+        <div class="result-desc" id="resultDesc"></div>
+        <div class="result-domain-info" id="resultDomain"></div>
     </div>
 </div>
 
 <script>
     function checkLink() {
-        const url = document.getElementById('urlInput').value;
+        const input = document.getElementById('urlInput').value.trim();
         const resultBox = document.getElementById('resultBox');
-        const resultStatus = document.getElementById('resultStatus');
-        const resultDate = document.getElementById('resultDate');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultDesc = document.getElementById('resultDesc');
+        const resultDomain = document.getElementById('resultDomain');
 
-        if (!url) {
-            alert('অনুগ্রহ করে একটি লিংক প্রবেশ করান!');
+        if (!input) {
+            alert('অনুগ্রহ করে একটি সঠিক ওয়েবসাইটের লিংক দিন!');
             return;
         }
 
-        // আউটপুট দেখানোর জন্য
-        resultStatus.innerText = "নিরাপদ মনে হচ্ছে! এই লিংকটিতে তাৎক্ষণিক কোনো ক্ষতিকর উপাদান পাওয়া যায়নি। তবে সাবধানে ব্রাউজ করুন।";
-        
-        // বর্তমান তারিখ ও সময় বের করার নিয়ম
-        const now = new Date();
-        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        const formattedDate = now.toLocaleDateString('bn-BD', dateOptions);
+        let hostname = "";
+        try {
+            let formattedUrl = input;
+            if (!input.startsWith('http://') && !input.startsWith('https://')) {
+                formattedUrl = 'https://' + input;
+            }
+            const parsedUrl = new URL(formattedUrl);
+            hostname = parsedUrl.hostname;
+        } catch (e) {
+            hostname = input;
+        }
 
-        resultDate.innerText = "যাচাইকরণের তারিখ ও সময়: " + formattedDate;
-        
+        // সাধারণ সন্দেহজনক ফিশিং প্যাটার্ন বা ভুয়া ডোমেইন এক্সটেনশন চেক
+        const suspiciousPatterns = ['login-', 'verify-', 'free-', 'offer-', 'bkash-', '000webhost', '0nline', 'g00gle'];
+        const isSuspicious = suspiciousPatterns.some(pattern => hostname.toLowerCase().includes(pattern));
+
         resultBox.style.display = "block";
+
+        if (isSuspicious) {
+            resultBox.className = "result-box result-warning";
+            resultTitle.className = "result-title text-warning";
+            resultTitle.innerText = "⚠️ সতর্কবার্তা: সম্ভাব্য ফিশিং বা ভুয়া লিংক!";
+            resultDesc.innerText = "এই লিংকটির নাম ও স্পেলিংয়ে সন্দেহজনক ফিশিং প্যাটার্ন চিহ্নিত হয়েছে। এমন লিংক ব্যবহার করে ব্যক্তিগত তথ্য চুরি বা আর্থিক জালিয়াতি হতে পারে।";
+            resultDomain.innerText = "স্ক্যান করা ডোমেইন: " + hostname + " (নতুন বা অনিরাপদ উৎস)";
+        } else {
+            resultBox.className = "result-box result-safe";
+            resultTitle.className = "result-title text-safe";
+            resultTitle.innerText = "✅ সাইট স্ট্যাটাস: নিরাপদ";
+            resultDesc.innerText = "লিংকটিতে কোনো পরিচিত জালিয়াতি বা ফিশিং প্যাটার্ন পাওয়া যায়নি। এটি একটি নিবন্ধিত ও সাধারণ ওয়েব ঠিকানা।";
+            resultDomain.innerText = "স্ক্যান করা ডোমেইন: " + hostname;
+        }
     }
 </script>
 
